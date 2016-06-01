@@ -1,4 +1,4 @@
-// Replace consective blanks by a single blank.
+// Replace tabs by \t, backspace by \b, backslash by \\
 
 
 
@@ -26,24 +26,21 @@ int main(void){
 	
 		switch(*p){		
 
-			case ' ':
-				if(state == STATE0){
-					printf(" ");
-					state = STATE1;
-					p++;
-					continue;
-				}
-				else{
-					p++;
-					continue;
-				}
+			case '\t':
+				printf("\\t");
 				break;
+			case '\b':
+				printf("\\b");
+				break;
+			case '\\':
+				printf("\\\\");
+				break;
+
 			default:
-				if(state == STATE1)
-					state = STATE0;
 				printf("%c",*p);
-				p++;
+			
 		}
+		p++;
 	}
 	return 0;
 
