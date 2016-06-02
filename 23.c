@@ -28,6 +28,7 @@ int main(void){
 	char *p = NULL;
 	int new_index=0;
 	int state = NOT_COMMENT;
+	int flag_single_line_comment = 1;
 	if(fp!=NULL){
 
 		while(1){			
@@ -37,7 +38,9 @@ int main(void){
 			if(len == 0)
 				continue;
 			p = str;
-			while(*p){
+//			puts(str);
+			flag_single_line_comment = 1;
+			while(*p && flag_single_line_comment){
 				c = *p;
 				switch(state){
 
@@ -47,6 +50,7 @@ int main(void){
 							p+=2;
 							
 						 } else if( c == '/' && (*(p+1)) == '/' ){
+							flag_single_line_comment = 0;
 							break; // No need to scan the line anymore.
 						} else if( c == '"' ){
 							state = INSIDE_DQUOTE;

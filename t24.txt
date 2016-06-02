@@ -12,8 +12,6 @@ int main(void){
 	printf("Hello World %d \n",1);
 
 	// No output on omission of the above statement.
-
-
 	return 0;
 
 	// No problem on omission of above stmt for > C99.
