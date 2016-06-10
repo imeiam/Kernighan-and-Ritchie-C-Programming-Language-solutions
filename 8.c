@@ -14,12 +14,22 @@ int main(void){
 	scanf("%u",&n);
 	printf("\nEnter the number of bit rotations: ");	
 	scanf("%d",&r);
-	printf("\nValue: %d \n",rightrot(n,r));
+	printf("\nValue: %u \n",rightrot(n,r));
 	return 0;
 }
 int rightrot(unsigned x,int n){
 
 	int i=0;
 	n = n % 32; // size of unsigned - 32
-	return ((x & ~( ~0 << n )) << ( 32 - n)) | ( x >> n );
+	unsigned max_num = 0xFFFFFFFF;
+	for(;i<n;i++){
+		if( x & 1 ){
+			x = x >> 1;
+			x = x | ( max_num & ~( max_num  >> 1 )); // set the MSB.
+		}
+		else{
+			x = x >> 1;
+		}
+	}
+	return x;
 }
