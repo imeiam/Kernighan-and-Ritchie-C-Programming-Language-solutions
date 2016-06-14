@@ -1,6 +1,5 @@
 /*
-   Given the basic framework, it's straightforward to extend the calculator.
-   Add the modulus ( % ) operator and provisions for negative numbers.
+   Add access to library functions like sin , exp , and pow.
    */
 
 #include <stdio.h>
@@ -10,6 +9,7 @@
 
 #define MAXOP 100
 #define NUMBER 0
+#define IDENTIFIER 1
 #define MAXVAL 100
 #define BUFSIZE 100
 
@@ -60,10 +60,11 @@ void ungetch(int c)
 
 int getop(char *s)
 {
-	int i, c, d;
+	int i, c, d,test=1;
 	while((s[0] = c = getch()) == ' ' || c == '\t');
 	s[1] = '\0';
-	if(!isdigit(c) && c != '.' && c != '-')
+
+	if(!isalnum(c) && c != '.' && c != '-')
 		return c;
 	if(c == '-')
 	{
@@ -74,18 +75,25 @@ int getop(char *s)
 			ungetch(d);
 	}
 	i = 0;
-	if(isdigit(c) || c == '-')
-		while(isdigit(s[++i] = c = getch()));
+	if(isalnum(c) || c == '-')
+		while(isalnum(s[++i] = c = getch()));
 	if(c == '.')
-		while(isdigit(s[++i] = c = getch()));
+		while(isalnum(s[++i] = c = getch()));
 	s[i] = '\0';
 	if(c != EOF)
 		ungetch(c);
-	return NUMBER;
+	for(i=0;s[i] != '\0';i++)
+		if(!isalpha(s[i])){
+			test = 0;
+			break;
+		}
+	if(test)
+		return IDENTIFIER;
+	else
+		return NUMBER;
 }
 
 
-// For this question
 
 void display_top(void){
 	if(sp > 0 ) 
@@ -113,9 +121,24 @@ void swap_top_two(void){
 	push(two);
 }
 
+// For this question
 
 
+void identifier_handler(char s[]){
 
+	if( strcmp(s,"sin") == 0){
+		double top = pop();
+		push(sin(top));
+	
+	} else if( strcmp(s,"cos") == 0){
+		double top = pop();
+		push(cos(top));
+	} else if( strcmp(s,"pow") == 0){
+		double base = pop();
+		double exp = pop();
+		push(pow(base,exp)); // Assuming pow(a,b) is b a pow in postfix
+	}
+}
 
 int main()
 {
@@ -129,6 +152,9 @@ int main()
 		{
 			case NUMBER:
 				push(atof(s));
+				break;
+			case IDENTIFIER:
+				identifier_handler(s);
 				break;
 
 			case '+':
