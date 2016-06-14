@@ -1,6 +1,6 @@
 /*
-   Add commands to print the top element of the stack without popping, to duplicate it, and to swap the top two element.
-   Add a command to clear the stack.
+   Given the basic framework, it's straightforward to extend the calculator.
+   Add the modulus ( % ) operator and provisions for negative numbers.
    */
 
 #include <stdio.h>
@@ -113,10 +113,6 @@ void swap_top_two(void){
 	push(two);
 }
 
-void clear_stack(void){
-	sp = 0;
-}
-
 
 
 
@@ -169,10 +165,6 @@ int main()
 
 			case '#':
 				swap_top_two();
-				break;
-
-			case '^':
-				clear_stack();
 				break;
 
 			case '\n':
