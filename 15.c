@@ -1,3 +1,12 @@
+
+/*
+
+   Sort with options:
+
+	# -f =  Case insensitive sorting.
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
