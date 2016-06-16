@@ -3,7 +3,7 @@
    Sort with options:
 
 	# -f =  Case insensitive sorting.
-	# -d =  
+	# -d =  Only numbers, letters and blanks
 
 */
 
