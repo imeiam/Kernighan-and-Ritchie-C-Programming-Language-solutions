@@ -1,0 +1,7 @@
+#define  Adeshwar akl #define DOG doggy
+#define Good Day$@
+#define Adeshwar Akil
+#define me Test
+#define failure Success
+#define stat Status:
+Adeshwar, me stat failure!
