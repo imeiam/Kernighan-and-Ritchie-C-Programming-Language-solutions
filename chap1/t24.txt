@@ -1,0 +1,21 @@
+// Testing leaving out different parts of the program
+
+
+//#include<stdio.h>
+/*
+   On omission of this statement, the program works. The linker always links standard library to the executable. So any standard functions are always found.
+   Implicit declarations.
+*/
+
+int main(void){
+
+	printf("Hello World %d \n",1);
+
+	// No output on omission of the above statement.
+	return 0;
+
+	// No problem on omission of above stmt for > C99.
+	// Compilers supporting C99 return 0 by default from main if there is no return statement.
+	// C89 compilers does not provide this support.
+
+}
