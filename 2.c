@@ -4,9 +4,12 @@
 
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
 
 #define BUFSIZE 1000
 #define MAXLEN 100
+
+#define GROUP_MAX 1000
 
 
 char buf[BUFSIZE];
@@ -16,6 +19,31 @@ char *keyword_arr[]  = {"include", "main" ,"return","int","char","void","\0"};
 int keyword_count=0;
 
 //char avoid_char[] ={EOF,'/','*','"','#','.','>','<','(',')','}','{',';','.','+','-','*','/','%'};
+
+
+
+typedef struct var{
+	char word[MAXLEN];
+	int count;
+	struct var *left;
+	struct var *right;
+}variable;
+
+
+
+variable *root  = NULL;
+
+variable groups[GROUP_MAX];
+int group_count=0;
+
+
+variable *addTree(variable *p,char *w){
+
+
+
+}
+
+
 
 
 
@@ -60,8 +88,6 @@ int getword(char *word,int lim,FILE *fp){
 	while(isspace(c = getch(fp)));
 	if(c==EOF)
 		return -1;
-	// Assume end of input
-	//if(bin_search_avoid_char(c)== -1 && !isdigit(c))
 	
 	// Word begin with alpha or _
 	if(isalpha(c) || c=='_')
@@ -132,6 +158,16 @@ void sort_keyword_arr(){
 	}
 }
 
+variable *create_node(char *w){
+
+	variable *a = (variable *) malloc(sizeof(variable));
+	strcpy(a->word,w);
+	a->count = 1; // Found one already.
+	a->left = NULL;
+	a->right= NULL;
+	return a;
+}
+
 int main(void){
 
 	char line[MAXLEN];
@@ -155,7 +191,10 @@ int main(void){
 		while(getword(line,MAXLEN,fp)!=-1){
 			if(line[0]!='\0' && bin_search_keyword_arr(line)==-1){	
 				// line should not be null and must not be a keyword.
-				puts(line);
+				//puts(line);
+				variable *node = create_node(line);
+				puts(node->word);
+				
 			}
 		}
 		fclose(fp);

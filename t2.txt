@@ -4,6 +4,7 @@
 int main(void){
 	int a;
 	int c;
+	int akil;
 	int d= 12*(23+12);
 	char arr[]="akil adeshwar";
 	int gorilla;
