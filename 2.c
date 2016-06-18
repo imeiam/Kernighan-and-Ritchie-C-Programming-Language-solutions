@@ -209,12 +209,15 @@ void traverse_tree(variable *root){
 	}
 }
 
-int main(void){
+int main(int argc,char *argv[]){
 
 	char line[MAXLEN];
 	FILE *fp = fopen("t2.txt","r");
 	if(fp!=NULL){
-		
+
+		if(argc>1){
+			cmp_index_limit = atoi(argv[1]);
+		}
 		// Calculate no of keywords
 		int i=0;
 		while(keyword_arr[i++][0]!='\0')
