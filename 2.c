@@ -190,6 +190,19 @@ void sort_keyword_arr(){
 	}
 }
 
+void sort_groups_arr(){
+	int i=0;
+	variable t;
+	for(i=0;i<group_count-1;i++){
+		if(strcmp(groups[i].word,groups[i+1].word)>0){
+			t = groups[i];
+			groups[i] = groups[i+1];
+			groups[i+1] = t;
+			i = -1;
+		}
+	}
+}
+
 variable *create_node(char *w){
 
 	variable *a = (variable *) malloc(sizeof(variable));
@@ -243,6 +256,8 @@ int main(int argc,char *argv[]){
 		}
 		fclose(fp);
 
+		// Sort groups to alphabetical order
+		sort_groups_arr();
 		for(i=0;i<group_count;i++){
 			printf("Group - %d \n",i+1);
 			traverse_tree(&groups[i]);
