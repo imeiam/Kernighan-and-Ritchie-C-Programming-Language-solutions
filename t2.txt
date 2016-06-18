@@ -1,0 +1,12 @@
+#include<stdio.h>
+/* akil adeshwar good day */
+//Test me now
+int main(void){
+	int a;
+	int c;
+	int d= 12*(23+12);
+	char arr[]="akil adeshwar";
+	int gorilla;
+	int ape;
+	return 0;
+}
