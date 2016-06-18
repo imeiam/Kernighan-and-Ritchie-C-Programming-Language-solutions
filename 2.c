@@ -10,16 +10,13 @@
 #define MAXLEN 100
 
 #define GROUP_MAX 1000
-
+#define COMP_INDEX_LIMIT_DEFAULT 1
 
 char buf[BUFSIZE];
 int bufp = 0;
 
 char *keyword_arr[]  = {"include", "main" ,"return","int","char","void","\0"};
 int keyword_count=0;
-
-//char avoid_char[] ={EOF,'/','*','"','#','.','>','<','(',')','}','{',';','.','+','-','*','/','%'};
-
 
 
 typedef struct var{
@@ -36,16 +33,51 @@ variable *root  = NULL;
 variable groups[GROUP_MAX];
 int group_count=0;
 
+int cmp_index_limit = COMP_INDEX_LIMIT_DEFAULT;
 
-variable *addTree(variable *p,char *w){
 
+void copy_var(variable *s,variable *t){
 
+	strcpy(s->word,t->word);
+	s->count = t->count;
+	s->left = t->left;
+	s->right = t->right;
 
 }
 
 
+variable *add_to_tree(variable *root,variable *p){
+
+	if(root == NULL){
+		root = (variable *) malloc(sizeof(variable));
+		copy_var(root,p);
+	}
+	else{
+		if(strcmp(p->word,root->word)<0)
+			root->left = add_to_tree(root->left,p);
+		else if(strcmp(p->word,root->word)>0)
+			root->right = add_to_tree(root->right,p);
+		else
+			root->count++; // Same word occuring again
+	}
+	return root;
+}
 
 
+variable *add_to_group(variable *p){
+
+	int i=0,inserted_flag=0;
+	for(;i<group_count;i++){
+		if(strncmp(groups[i].word,p->word,cmp_index_limit)==0){
+			add_to_tree(&groups[i],p);
+			inserted_flag=1;
+		}
+	}
+	if(!inserted_flag){
+		copy_var(&groups[group_count],p);
+		group_count++;
+	}
+}
 
 int bin_search_keyword_arr(char find[]){
 
@@ -168,6 +200,15 @@ variable *create_node(char *w){
 	return a;
 }
 
+void traverse_tree(variable *root){
+
+	if(root!=NULL){
+		traverse_tree(root->left);
+		printf("%s - Count: %d \n",root->word,root->count);
+		traverse_tree(root->right);
+	}
+}
+
 int main(void){
 
 	char line[MAXLEN];
@@ -193,11 +234,17 @@ int main(void){
 				// line should not be null and must not be a keyword.
 				//puts(line);
 				variable *node = create_node(line);
-				puts(node->word);
-				
+				//puts(node->word);
+				add_to_group(node);
 			}
 		}
 		fclose(fp);
+
+		for(i=0;i<group_count;i++){
+			printf("Group - %d \n",i+1);
+			traverse_tree(&groups[i]);
+			putchar('\n');
+		}
 	}
 	return 0;
 }
