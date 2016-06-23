@@ -127,14 +127,19 @@ int _fillbufx(FILEx *fp){
 //fflushx
 int fflushx(FILEx *fp){
 	
-	int bufsize = (fp->flags._UNBUF != 0)? 1:BUFSIZ;
 
 	if(fp==NULL){
+		for(fp=_iob;fp<_iob+OPEN_MAX;fp++){
+			if(is_empty(fp->flags))
+				continue;
+			fflushx(fp); // Recursively calling fflushx as in this loop fp can never be NULL.
+		}
 	}
 	else if(fp->flags._WRITE == 0)
 		return EOF;
 	else{
 		//Flush the output buffer
+		int bufsize = (fp->flags._UNBUF != 0)? 1:BUFSIZ;
 		if(write(fp->fd,fp->base,bufsize-fp->cnt)!=bufsize-fp->cnt){
 			puts("fflush -Write Error");
 			return EOF;
@@ -233,10 +238,21 @@ int main(void){
 		while((c=getchar())!='$'){
 			putcx(c,fp);
 		}
+		//Testing fclose,   Comment from here
 		if(fclosex(fp) ==0)
 			puts("File close - Success");
 		else 
 			puts("File close - Failure");
+
+		// to here and uncomment below to check fflush(NULL)
+
+
+		/* Testing fflush with fflush(NULL) - it should clear the output buffer
+		   of all the output streams. If working, the string entered should
+		   be present in writeone.txt
+		   */
+		//fflushx(NULL);
+		//close(fp->fd);
 	}
 	return 0;
 }
