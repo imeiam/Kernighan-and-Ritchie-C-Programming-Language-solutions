@@ -30,7 +30,9 @@ void dirwalk( char *dir,void (*fcn)(char *)){
 		return;
 	}
 	puts(dir);
+	// Get each dir entry
 	while((dp=readdir(dfd)) != NULL){
+		// Skip . and .. is redundant.
 		if(strcmp(dp->d_name,".") == 0
 			|| strcmp(dp->d_name,"..") ==0 )
 			continue;
@@ -38,6 +40,7 @@ void dirwalk( char *dir,void (*fcn)(char *)){
 			puts("Error: Name too long!");
 		else{
 			sprintf(name,"%s/%s",dir,dp->d_name);
+			// Call fsize
 			(*fcn)(name);
 		}
 	}

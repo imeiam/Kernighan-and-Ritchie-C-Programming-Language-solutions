@@ -116,16 +116,17 @@ int bfree(char *p,unsigned n){
 	// Error Checking
 	if(p==NULL || n == 0)
 		return -1;
-	
+	// Cannot create block if total size is less than Header size	
 	if(sizeof(Header)>=n){
 		printf("\nError: Cannot form a block");
 	}
 
 	if(freep == NULL){
-		// Create a starting point
+		// Create a starting point for free list
 		base.s.ptr = freep = &base;
 		base.s.size=0;	
 	}
+	// Calculate no of segments
 	int nunits = n/sizeof(Header);
 	int skipsize = n%sizeof(Header); // This is to follow strict alignment
 	p+=skipsize;// Modify start

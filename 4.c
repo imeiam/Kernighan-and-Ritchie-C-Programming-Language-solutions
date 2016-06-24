@@ -162,6 +162,7 @@ int fseekx(FILEx *fp,int offset,int origin){
 		switch(origin){
 			case SEEK_SET:
 				if(offset<0)
+					// Cannot move backward from start
 					return EOF;
 				if(lseek(fp->fd,offset,SEEK_SET)<0){
 					return EOF;//Error
@@ -171,6 +172,7 @@ int fseekx(FILEx *fp,int offset,int origin){
 				break;
 			case SEEK_END:	
 				if(offset>0)
+					// Cannot move forward from end
 					return EOF;
 				if(lseek(fp->fd,offset,SEEK_END)<0){
 					puts("Seek Error");
@@ -191,6 +193,7 @@ int fseekx(FILEx *fp,int offset,int origin){
 						fp->ptr = fp->ptr - offset;
 					}
 					else{
+						// If postition to seek is not in buffer reload buffer.
 						if(lseek(fp->fd,offset,SEEK_CUR)<0)
 							return EOF;
 						fp->ptr = fp->base;

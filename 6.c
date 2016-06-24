@@ -12,6 +12,8 @@
 
 typedef long Align;
 
+
+// Align is used to make block size multiples of Header size
 union header{
 	struct {
 		union header *ptr;
@@ -103,12 +105,14 @@ void *callocx(int n,unsigned nbytes){
 	Header *p, *prevp;
 	unsigned nunits;
 	Header *morecore(unsigned);
-
+	// Calculate no of segments in a block. One extra segment is added to store Header
 	nunits = (n*nbytes+sizeof(Header)-1)/sizeof(Header) + 1;
+	// Intialize freep
 	if((prevp=freep)==NULL){
 		base.s.ptr = freep = prevp = &base;
 		base.s.size = 0;
 	}
+	// Find free block
 	for(p=prevp->s.ptr; ; prevp = p,p = p->s.ptr){
 		if(p->s.size >= nunits){
 			if(p->s.size == nunits )
@@ -122,7 +126,7 @@ void *callocx(int n,unsigned nbytes){
 			memset(p+1,0,(p->s.size-1)*sizeof(Header));	// Different from mallocx
 			return (void *)(p+1);
 		}
-		if(p == freep) // wrap around
+		if(p == freep) // On wrap around, request for more memory
 			if((p = morecore(nunits))==NULL)
 				return NULL;
 	}
