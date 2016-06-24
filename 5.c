@@ -5,6 +5,8 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <dirent.h>
+#include <pwd.h>
+
 
 #define MAX_PATH 1024
 
@@ -49,7 +51,8 @@ void fsize(char *name){
 	if((stbuf.st_mode & S_IFMT) == S_IFDIR){
 		dirwalk(name,fsize);
 	}
-	printf("%81d %s\n",(int)stbuf.st_size,name);
+	struct passwd *pwd = getpwuid(stbuf.st_uid);
+	printf("%81d %s Owner: %s\n",(int)stbuf.st_size,name,pwd->pw_name);
 }
 
 
