@@ -6,6 +6,7 @@ Note: This solution uses field based approach to handle flags as a continuation 
 #include<stdio.h>
 #include<fcntl.h>
 #include<stdlib.h>
+#include<string.h>
 
 #define EOF (-1)
 #define OPEN_MAX 20 // Maximum files that can be open
@@ -189,28 +190,13 @@ int _flushbufx(char c,FILEx *fp){
 
 
 
-
-
-
-void clear_flags(struct _flags flags){
-
-	flags._READ =0;
-        flags._WRITE=0;
-	flags._UNBUF=0;
-	flags._EOF  =0;
-	flags._ERR=0;
-}
-
 // fclosex
 
 int fclosex(FILEx *fp){
 	if(fp==NULL)
 		return -1;
 	fflushx(fp); // Clears the output buffer for an output stream	
-	fp->cnt=0;
-	fp->base=NULL;
-	fp->ptr= NULL;
-	clear_flags(fp->flags);
+	memset(fp,0,sizeof(FILEx));
 	return close(fp->fd);
 }
 
@@ -230,7 +216,7 @@ int main(void){
 		puts("Error"); */
 
 
-	// TESTING WRITE OPERATION	
+	// TESTING WRITE OPERATION
 	FILEx *fp = fopenx("writeone.txt","w");
 	if(fp!=NULL){	
 		char c;
